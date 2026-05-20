@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OdontoVita — Clínica Odontológica</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --azul:       #1a4f8a;
+      --azul-escuro:#0d2f57;
+      --azul-claro: #2f80d4;
+      --acento:     #00c9a7;
+      --acento2:    #00a88a;
+      --branco:     #ffffff;
+      --off-white:  #f4f8fc;
+      --texto:      #1c2b3a;
+      --texto-muted:#5a7490;
+      --borda:      #d6e4f0;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      color: var(--texto);
+      background: var(--branco);
+      overflow-x: hidden;
+    }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--borda);
+      transition: box-shadow .3s;
+    }
+    nav.scrolled { box-shadow: 0 4px 28px rgba(26,79,138,.10); }
+
+    .nav-inner {
+      max-width: 1200px; margin: 0 auto;
+      padding: 0 2rem;
+      height: 72px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem; font-weight: 700;
+      color: var(--azul);
+      display: flex; align-items: center; gap: .5rem;
+      text-decoration: none;
+    }
+    .logo span { color: var(--acento); }
+
+    .logo-icon {
+      width: 36px; height: 36px;
+      background: var(--azul);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .logo-icon svg { width: 20px; height: 20px; fill: white; }
+
+    .nav-links {
+      display: flex; gap: 2.2rem; list-style: none;
+    }
+    .nav-links a {
+      text-decoration: none;
+      font-size: .93rem; font-weight: 500;
+      color: var(--texto-muted);
+      transition: color .25s;
+      letter-spacing: .01em;
+    }
+    .nav-links a:hover { color: var(--azul); }
+
+    .nav-cta {
+      background: var(--azul);
+      color: white !important;
+      padding: .55rem 1.4rem;
+      border-radius: 50px;
+      transition: background .25s, transform .2s !important;
+    }
+    .nav-cta:hover { background: var(--azul-claro) !important; transform: translateY(-1px); }
+
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px; cursor: pointer;
+      background: none; border: none; padding: .3rem;
+    }
+    .hamburger span {
+      display: block; width: 24px; height: 2px;
+      background: var(--azul); border-radius: 2px;
+      transition: .3s;
+    }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      position: relative; overflow: hidden;
+      padding-top: 72px;
+    }
+
+    /* Video background */
+    .hero-video {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Overlay gradiente sobre o vídeo */
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        135deg,
+        rgba(13, 47, 87, 0.82) 0%,
+        rgba(26, 79, 138, 0.70) 50%,
+        rgba(10, 35, 65, 0.78) 100%
+      );
+      z-index: 1;
+    }
+
+    /* Linha de cor acento na base do hero */
+    .hero-line {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, transparent, var(--acento), transparent);
+      z-index: 2;
+    }
+
+    .hero-blob {
+      position: absolute; border-radius: 50%;
+      filter: blur(70px); opacity: .10;
+      pointer-events: none;
+      z-index: 2;
+    }
+    .blob-1 { width: 600px; height: 600px; background: var(--acento); top: -150px; right: -100px; }
+    .blob-2 { width: 400px; height: 400px; background: #4db8ff; bottom: -100px; left: -100px; }
+
+    .hero-grid {
+      max-width: 1200px; margin: 0 auto;
+      padding: 5rem 2rem;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 4rem; align-items: center;
+      position: relative; z-index: 3;
+    }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.25);
+      color: var(--acento);
+      font-size: .82rem; font-weight: 600;
+      padding: .4rem 1rem; border-radius: 50px;
+      margin-bottom: 1.5rem;
+      letter-spacing: .06em; text-transform: uppercase;
+    }
+    .hero-badge::before {
+      content: '';
+      width: 7px; height: 7px;
+      background: var(--acento);
+      border-radius: 50%;
+      animation: pulse-dot 1.5s infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%,100% { transform: scale(1); opacity:1; }
+      50% { transform: scale(1.5); opacity:.6; }
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 5vw, 3.8rem);
+      font-weight: 900;
+      color: white;
+      line-height: 1.12;
+      margin-bottom: 1.4rem;
+    }
+    .hero-title em {
+      font-style: normal;
+      color: var(--acento);
+      position: relative;
+    }
+
+    .hero-desc {
+      font-size: 1.08rem; font-weight: 300;
+      color: rgba(255,255,255,.75);
+      line-height: 1.75;
+      margin-bottom: 2.5rem;
+      max-width: 480px;
+    }
+
+    .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+    .btn-primary {
+      background: var(--acento);
+      color: white;
+      padding: .85rem 2.2rem;
+      border-radius: 50px; border: none; cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem; font-weight: 600;
+      text-decoration: none;
+      display: inline-flex; align-items: center; gap: .5rem;
+      transition: transform .25s, box-shadow .25s;
+      box-shadow: 0 8px 28px rgba(0,201,167,.35);
+    }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 14px 36px rgba(0,201,167,.45); }
+
+    .btn-outline {
+      background: transparent;
+      color: white;
+      padding: .85rem 2rem;
+      border-radius: 50px;
+      border: 1.5px solid rgba(255,255,255,.35);
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem; font-weight: 500;
+      text-decoration: none;
+      display: inline-flex; align-items: center; gap: .5rem;
+      transition: border-color .25s, background .25s;
+    }
+    .btn-outline:hover { border-color: white; background: rgba(255,255,255,.08); }
+
+    /* Hero visual */
+    .hero-visual {
+      position: relative; display: flex; justify-content: center;
+    }
+
+    .hero-card-main {
+      background: white;
+      border-radius: 24px;
+      padding: 2.5rem;
+      box-shadow: 0 40px 80px rgba(0,0,0,.25);
+      width: 100%; max-width: 380px;
+      position: relative; z-index: 2;
+    }
+
+    .card-smile {
+      width: 70px; height: 70px;
+      background: linear-gradient(135deg, var(--azul), var(--azul-claro));
+      border-radius: 18px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 1.2rem;
+      font-size: 2rem;
+    }
+
+    .card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem; font-weight: 700;
+      color: var(--azul-escuro);
+      margin-bottom: .5rem;
+    }
+
+    .card-sub {
+      font-size: .88rem; color: var(--texto-muted);
+      margin-bottom: 1.5rem; line-height: 1.6;
+    }
+
+    .stats-row {
+      display: flex; gap: 1rem;
+    }
+
+    .stat {
+      flex: 1; background: var(--off-white);
+      border-radius: 14px; padding: .9rem;
+      text-align: center;
+    }
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem; font-weight: 700;
+      color: var(--azul);
+    }
+    .stat-label {
+      font-size: .75rem; color: var(--texto-muted);
+      font-weight: 500; margin-top: .15rem;
+    }
+
+    .floating-pill {
+      position: absolute;
+      background: white;
+      border-radius: 16px;
+      padding: .7rem 1.1rem;
+      box-shadow: 0 12px 40px rgba(0,0,0,.18);
+      display: flex; align-items: center; gap: .6rem;
+      font-size: .82rem; font-weight: 600;
+      color: var(--texto);
+      z-index: 3;
+    }
+
+    .pill-top { top: -20px; right: -30px; animation: float1 3s ease-in-out infinite; }
+    .pill-bot { bottom: 30px; left: -40px; animation: float2 3.5s ease-in-out infinite; }
+
+    @keyframes float1 {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    @keyframes float2 {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(8px); }
+    }
+
+    .pill-icon { font-size: 1.2rem; }
+
+    /* ── SECTION SHARED ── */
+    section { padding: 6rem 2rem; }
+
+    .section-inner { max-width: 1200px; margin: 0 auto; }
+
+    .section-label {
+      display: inline-flex; align-items: center; gap: .5rem;
+      font-size: .78rem; font-weight: 700;
+      color: var(--acento);
+      letter-spacing: .12em; text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    .section-label::before {
+      content: '';
+      width: 24px; height: 2px; background: var(--acento);
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 700;
+      color: var(--azul-escuro);
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    .section-desc {
+      font-size: 1.05rem; color: var(--texto-muted);
+      line-height: 1.75; max-width: 580px;
+    }
+
+    /* ── SOBRE ── */
+    #sobre { background: var(--off-white); }
+
+    .sobre-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 5rem; align-items: center;
+    }
+
+    .sobre-img-wrap {
+      position: relative; border-radius: 24px; overflow: visible;
+    }
+
+    .sobre-img-bg {
+      width: 100%;
+      aspect-ratio: 4/5;
+      background: linear-gradient(145deg, var(--azul) 0%, var(--azul-claro) 100%);
+      border-radius: 24px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 6rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .sobre-img-bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, transparent 40%, rgba(13,47,87,.7));
+    }
+
+    .sobre-badge-float {
+      position: absolute;
+      bottom: -20px; right: -20px;
+      background: var(--acento);
+      color: white; border-radius: 20px;
+      padding: 1.2rem 1.5rem;
+      box-shadow: 0 16px 40px rgba(0,201,167,.3);
+      z-index: 2;
+    }
+    .badge-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem; font-weight: 900; line-height: 1;
+    }
+    .badge-text { font-size: .8rem; font-weight: 500; opacity: .9; }
+
+    .sobre-content { padding: 1rem 0; }
+
+    .sobre-list {
+      list-style: none; margin: 2rem 0;
+      display: flex; flex-direction: column; gap: .9rem;
+    }
+    .sobre-list li {
+      display: flex; align-items: flex-start; gap: .8rem;
+      font-size: .97rem; color: var(--texto); line-height: 1.55;
+    }
+    .list-check {
+      width: 22px; height: 22px; min-width: 22px;
+      background: rgba(0,201,167,.12);
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--acento); font-size: .8rem; font-weight: 700;
+      margin-top: .1rem;
+    }
+
+    /* ── SERVIÇOS ── */
+    #servicos { background: white; }
+
+    .servicos-header {
+      display: flex; justify-content: space-between;
+      align-items: flex-end; margin-bottom: 3.5rem;
+      flex-wrap: wrap; gap: 1.5rem;
+    }
+
+    .servicos-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .servico-card {
+      background: var(--off-white);
+      border-radius: 20px; padding: 2rem;
+      border: 1.5px solid transparent;
+      transition: border-color .3s, transform .3s, box-shadow .3s;
+      position: relative; overflow: hidden;
+      cursor: default;
+    }
+    .servico-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--azul), var(--acento));
+      transform: scaleX(0); transform-origin: left;
+      transition: transform .35s;
+    }
+    .servico-card:hover {
+      border-color: var(--borda);
+      transform: translateY(-6px);
+      box-shadow: 0 20px 50px rgba(26,79,138,.1);
+    }
+    .servico-card:hover::before { transform: scaleX(1); }
+
+    .servico-icon {
+      width: 56px; height: 56px;
+      background: linear-gradient(135deg, var(--azul), var(--azul-claro));
+      border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; margin-bottom: 1.3rem;
+    }
+
+    .servico-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem; font-weight: 700;
+      color: var(--azul-escuro); margin-bottom: .6rem;
+    }
+
+    .servico-desc {
+      font-size: .9rem; color: var(--texto-muted);
+      line-height: 1.65;
+    }
+
+    /* ── AGENDAMENTO ── */
+    #agendar {
+      background: linear-gradient(135deg, var(--azul-escuro), var(--azul));
+      position: relative; overflow: hidden;
+    }
+
+    #agendar .hero-blob { opacity: .10; }
+
+    .agendar-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 5rem; align-items: center;
+    }
+
+    .agendar-left .section-title { color: white; }
+    .agendar-left .section-desc { color: rgba(255,255,255,.75); max-width: 440px; }
+
+    .agendar-features {
+      list-style: none;
+      margin-top: 2rem;
+      display: flex; flex-direction: column; gap: .8rem;
+    }
+    .agendar-features li {
+      display: flex; align-items: center; gap: .7rem;
+      color: rgba(255,255,255,.85); font-size: .95rem;
+    }
+    .agendar-features li span:first-child {
+      font-size: 1.2rem;
+    }
+
+    .form-card {
+      background: white;
+      border-radius: 24px;
+      padding: 2.5rem;
+      box-shadow: 0 40px 80px rgba(0,0,0,.2);
+    }
+
+    .form-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem; font-weight: 700;
+      color: var(--azul-escuro); margin-bottom: 1.8rem;
+    }
+
+    .form-group { margin-bottom: 1.2rem; }
+
+    .form-label {
+      display: block;
+      font-size: .82rem; font-weight: 600;
+      color: var(--texto-muted);
+      margin-bottom: .45rem;
+      letter-spacing: .04em; text-transform: uppercase;
+    }
+
+    .form-input, .form-select {
+      width: 100%;
+      padding: .85rem 1.1rem;
+      border: 1.5px solid var(--borda);
+      border-radius: 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .97rem; color: var(--texto);
+      background: var(--off-white);
+      outline: none;
+      transition: border-color .25s, box-shadow .25s;
+      appearance: none;
+    }
+    .form-input:focus, .form-select:focus {
+      border-color: var(--azul-claro);
+      box-shadow: 0 0 0 3px rgba(47,128,212,.15);
+      background: white;
+    }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    .btn-form {
+      width: 100%;
+      background: var(--azul);
+      color: white;
+      padding: 1rem;
+      border-radius: 50px; border: none; cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem; font-weight: 600;
+      margin-top: .5rem;
+      transition: background .25s, transform .2s, box-shadow .25s;
+    }
+    .btn-form:hover {
+      background: var(--azul-claro);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(26,79,138,.3);
+    }
+
+    /* ── DEPOIMENTOS ── */
+    #depoimentos { background: var(--off-white); }
+
+    .dep-header {
+      text-align: center; margin-bottom: 3.5rem;
+    }
+    .dep-header .section-label { justify-content: center; }
+    .dep-header .section-desc { margin: 0 auto; text-align: center; }
+
+    .dep-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .dep-card {
+      background: white;
+      border-radius: 20px; padding: 2rem;
+      border: 1px solid var(--borda);
+      position: relative;
+      transition: transform .3s, box-shadow .3s;
+    }
+    .dep-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 50px rgba(26,79,138,.09);
+    }
+
+    .dep-stars {
+      color: #f5a623; font-size: 1rem; margin-bottom: 1rem;
+      letter-spacing: .05em;
+    }
+
+    .dep-text {
+      font-size: .97rem; color: var(--texto);
+      line-height: 1.7; margin-bottom: 1.5rem;
+      font-style: italic;
+    }
+
+    .dep-author {
+      display: flex; align-items: center; gap: .9rem;
+    }
+
+    .dep-avatar {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--azul), var(--azul-claro));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; font-weight: 700; color: white;
+      font-family: 'Playfair Display', serif;
+    }
+
+    .dep-name {
+      font-weight: 600; font-size: .95rem; color: var(--azul-escuro);
+    }
+    .dep-role { font-size: .82rem; color: var(--texto-muted); }
+
+    .dep-quote {
+      position: absolute; top: 1.5rem; right: 1.5rem;
+      font-family: 'Playfair Display', serif;
+      font-size: 4rem; line-height: 1; color: var(--borda);
+      font-weight: 900;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--azul-escuro);
+      color: rgba(255,255,255,.7);
+      padding: 3rem 2rem;
+    }
+
+    .footer-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; justify-content: space-between;
+      align-items: center; flex-wrap: wrap; gap: 1.5rem;
+    }
+
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem; font-weight: 700; color: white;
+    }
+    .footer-logo span { color: var(--acento); }
+
+    .footer-copy {
+      font-size: .85rem; text-align: center;
+    }
+
+    .footer-dev { font-size: .8rem; opacity: .55; }
+    .footer-dev a { color: var(--acento); text-decoration: none; }
+
+    /* ── WHATSAPP ── */
+    .wa-btn {
+      position: fixed; bottom: 2rem; right: 2rem; z-index: 999;
+      width: 58px; height: 58px;
+      background: #25D366; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 8px 28px rgba(37,211,102,.45);
+      text-decoration: none; transition: transform .25s;
+    }
+    .wa-btn:hover { transform: scale(1.1); }
+    .wa-btn svg { width: 30px; height: 30px; fill: white; }
+
+    .wa-pulse {
+      position: absolute; inset: -6px;
+      border-radius: 50%;
+      border: 2px solid #25D366;
+      opacity: 0;
+      animation: wa-ring 2s ease-out infinite;
+    }
+    .wa-pulse:nth-child(2) { animation-delay: .6s; }
+
+    @keyframes wa-ring {
+      0% { transform: scale(.85); opacity: .8; }
+      100% { transform: scale(1.6); opacity: 0; }
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 1024px) {
+      .servicos-grid { grid-template-columns: repeat(2,1fr); }
+      .dep-grid { grid-template-columns: repeat(2,1fr); }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; flex-direction: column; position: absolute;
+        top: 72px; left: 0; right: 0; background: white;
+        padding: 1.5rem 2rem; gap: 1.2rem; border-bottom: 1px solid var(--borda);
+        box-shadow: 0 8px 24px rgba(0,0,0,.08); }
+      .nav-links.open { display: flex; }
+      .hamburger { display: flex; }
+
+      .hero-grid { grid-template-columns: 1fr; text-align: center; gap: 3rem; }
+      .hero-desc { margin: 0 auto 2rem; }
+      .hero-btns { justify-content: center; }
+      .hero-visual { display: none; }
+
+      .sobre-grid { grid-template-columns: 1fr; }
+      .sobre-img-wrap { display: none; }
+
+      .servicos-header { flex-direction: column; }
+      .servicos-grid { grid-template-columns: 1fr; }
+
+      .agendar-grid { grid-template-columns: 1fr; }
+      .agendar-left { display: none; }
+
+      .dep-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+
+      .footer-inner { flex-direction: column; text-align: center; }
+
+      .pill-top, .pill-bot { display: none; }
+    }
+
+    /* ── GSAP INITIAL STATES ── */
+    .gsap-fade { opacity: 0; transform: translateY(40px); }
+    .gsap-left { opacity: 0; transform: translateX(-50px); }
+    .gsap-right { opacity: 0; transform: translateX(50px); }
+    .gsap-scale { opacity: 0; transform: scale(.9); }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav id="navbar">
+    <div class="nav-inner">
+      <a href="#" class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+        </div>
+        Odonto<span>Vita</span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#sobre">Sobre</a></li>
+        <li><a href="#servicos">Serviços</a></li>
+        <li><a href="#agendar">Agendamento</a></li>
+        <li><a href="#depoimentos">Depoimentos</a></li>
+        <li><a href="#agendar" class="nav-cta">Agendar Consulta</a></li>
+      </ul>
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <!-- Vídeo de fundo -->
+    <video class="hero-video" autoplay muted loop playsinline>
+      <source src="14163672_2160_3840_30fps.mp4" type="video/mp4" />
+    </video>
+    <!-- Overlay escuro azulado -->
+    <div class="hero-overlay"></div>
+    <div class="hero-line"></div>
+    <div class="hero-blob blob-1"></div>
+    <div class="hero-blob blob-2"></div>
+    <div class="hero-grid">
+      <div class="hero-text">
+        <div class="hero-badge gsap-fade">✦ Clínica Odontológica</div>
+        <h1 class="hero-title gsap-fade">
+          Seu sorriso é<br>nossa maior<br><em>conquista</em>
+        </h1>
+        <p class="hero-desc gsap-fade">
+          Cuidamos da sua saúde bucal com tecnologia de ponta, equipe especializada e um atendimento que te faz sorrir antes mesmo de entrar na cadeira.
+        </p>
+        <div class="hero-btns gsap-fade">
+          <a href="#agendar" class="btn-primary">
+            📅 Agendar Consulta
+          </a>
+          <a href="#servicos" class="btn-outline">
+            Ver Serviços →
+          </a>
+        </div>
+      </div>
+
+      <div class="hero-visual gsap-right">
+        <div class="floating-pill pill-top">
+          <span class="pill-icon">⭐</span>
+          <div>
+            <div style="font-weight:700;color:var(--azul-escuro)">4.9 / 5.0</div>
+            <div style="font-size:.72rem;color:var(--texto-muted)">+800 avaliações</div>
+          </div>
+        </div>
+
+        <div class="hero-card-main">
+          <div class="card-smile">🦷</div>
+          <div class="card-title">Saúde Bucal Completa</div>
+          <div class="card-sub">Desde a limpeza até implantes, cuidamos de você do início ao fim.</div>
+          <div class="stats-row">
+            <div class="stat">
+              <div class="stat-num">15+</div>
+              <div class="stat-label">Anos de experiência</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num">12k</div>
+              <div class="stat-label">Pacientes atendidos</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num">98%</div>
+              <div class="stat-label">Satisfação</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="floating-pill pill-bot">
+          <span class="pill-icon">✅</span>
+          <div>
+            <div style="font-weight:700;color:var(--azul-escuro)">Consulta agendada!</div>
+            <div style="font-size:.72rem;color:var(--texto-muted)">Amanhã às 10h00</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOBRE -->
+  <section id="sobre">
+    <div class="section-inner">
+      <div class="sobre-grid">
+        <div class="sobre-img-wrap gsap-left">
+          <div class="sobre-img-bg">🦷</div>
+          <div class="sobre-badge-float">
+            <div class="badge-num">15+</div>
+            <div class="badge-text">Anos de excelência</div>
+          </div>
+        </div>
+
+        <div class="sobre-content gsap-right">
+          <div class="section-label">Nossa História</div>
+          <h2 class="section-title">Uma clínica construída com cuidado e propósito</h2>
+          <p class="section-desc">
+            Fundada em 2009, a OdontoVita nasceu do desejo de oferecer odontologia de alto padrão com acolhimento humano. Somos uma equipe apaixonada pela saúde bucal, comprometida em proporcionar conforto e resultados reais a cada paciente.
+          </p>
+          <ul class="sobre-list">
+            <li>
+              <div class="list-check">✓</div>
+              <span>Equipe de especialistas com formação contínua e pós-graduação nas principais áreas da odontologia.</span>
+            </li>
+            <li>
+              <div class="list-check">✓</div>
+              <span>Tecnologia de ponta: radiografia digital, scanner intraoral 3D e materiais de última geração.</span>
+            </li>
+            <li>
+              <div class="list-check">✓</div>
+              <span>Ambiente planejado para oferecer conforto e segurança em todos os procedimentos.</span>
+            </li>
+            <li>
+              <div class="list-check">✓</div>
+              <span>Atendimento humanizado, com escuta ativa e respeito ao tempo de cada paciente.</span>
+            </li>
+          </ul>
+          <a href="#agendar" class="btn-primary" style="display:inline-flex;margin-top:.5rem;">
+            Conhecer a Clínica →
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVIÇOS -->
+  <section id="servicos">
+    <div class="section-inner">
+      <div class="servicos-header">
+        <div>
+          <div class="section-label gsap-fade">O que oferecemos</div>
+          <h2 class="section-title gsap-fade">Serviços que transformam<br>sorrisos</h2>
+        </div>
+        <p class="section-desc gsap-fade" style="max-width:340px;text-align:right">
+          Tratamentos modernos para cuidar da sua saúde bucal de forma completa e confortável.
+        </p>
+      </div>
+
+      <div class="servicos-grid">
+        <div class="servico-card gsap-scale">
+          <div class="servico-icon">🦷</div>
+          <div class="servico-title">Implantes Dentários</div>
+          <p class="servico-desc">Recupere sua autoestima com implantes de titânio de alta durabilidade, com resultado natural e permanente.</p>
+        </div>
+        <div class="servico-card gsap-scale">
+          <div class="servico-icon">✨</div>
+          <div class="servico-title">Clareamento Dental</div>
+          <p class="servico-desc">Sorria com mais confiança. Técnica a laser ou moldeiras para resultados rápidos, seguros e duradouros.</p>
+        </div>
+        <div class="servico-card gsap-scale">
+          <div class="servico-icon">😁</div>
+          <div class="servico-title">Ortodontia</div>
+          <p class="servico-desc">Aparelhos convencionais ou alinhadores invisíveis para um sorriso alinhado e harmônico em qualquer fase da vida.</p>
+        </div>
+        <div class="servico-card gsap-scale">
+          <div class="servico-icon">🩺</div>
+          <div class="servico-title">Periodontia</div>
+          <p class="servico-desc">Tratamento e prevenção de doenças gengivais com diagnóstico precoce e tecnologia de ponta.</p>
+        </div>
+        <div class="servico-card gsap-scale">
+          <div class="servico-icon">💎</div>
+          <div class="servico-title">Lentes de Contato</div>
+          <p class="servico-desc">Facetas de porcelana ultrafinas para um sorriso perfeito, sem desgaste do esmalte e resultado imediato.</p>
+        </div>
+        <div class="servico-card gsap-scale">
+          <div class="servico-icon">👶</div>
+          <div class="servico-title">Odontopediatria</div>
+          <p class="servico-desc">Cuidamos dos dentes dos pequenos com carinho, criando uma relação positiva com o dentista desde cedo.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AGENDAMENTO -->
+  <section id="agendar">
+    <div class="hero-blob blob-1"></div>
+    <div class="section-inner">
+      <div class="agendar-grid">
+        <div class="agendar-left gsap-left">
+          <div class="section-label" style="color:var(--acento)">Agende sua Consulta</div>
+          <h2 class="section-title">Cuide do seu sorriso hoje mesmo</h2>
+          <p class="section-desc">
+            Marque sua consulta em poucos minutos. Nossa equipe entrará em contato para confirmar o horário e tirar todas as suas dúvidas.
+          </p>
+          <ul class="agendar-features">
+            <li><span>📍</span><span>Localização central, fácil acesso e estacionamento</span></li>
+            <li><span>🕐</span><span>Atendimento de segunda a sábado, das 8h às 19h</span></li>
+            <li><span>💳</span><span>Parcelamos em até 12x sem juros</span></li>
+            <li><span>🏥</span><span>Convênios e planos odontológicos aceitos</span></li>
+          </ul>
+        </div>
+
+        <div class="form-card gsap-right">
+          <div class="form-title">📅 Marcar Consulta</div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Nome completo</label>
+              <input type="text" class="form-input" placeholder="Seu nome" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Telefone / WhatsApp</label>
+              <input type="tel" class="form-input" placeholder="(00) 00000-0000" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">E-mail</label>
+            <input type="email" class="form-input" placeholder="seu@email.com" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Serviço desejado</label>
+            <select class="form-select">
+              <option value="" disabled selected>Selecione um serviço</option>
+              <option>Consulta de avaliação</option>
+              <option>Implantes Dentários</option>
+              <option>Clareamento Dental</option>
+              <option>Ortodontia</option>
+              <option>Lentes de Contato</option>
+              <option>Odontopediatria</option>
+              <option>Outro</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Data preferida</label>
+              <input type="date" class="form-input" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Horário preferido</label>
+              <select class="form-select">
+                <option>Manhã (8h–12h)</option>
+                <option>Tarde (13h–18h)</option>
+                <option>Qualquer horário</option>
+              </select>
+            </div>
+          </div>
+
+          <button class="btn-form" onclick="agendarConsulta()">Solicitar Agendamento</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEPOIMENTOS -->
+  <section id="depoimentos">
+    <div class="section-inner">
+      <div class="dep-header">
+        <div class="section-label">Depoimentos</div>
+        <h2 class="section-title">O que nossos pacientes dizem</h2>
+        <p class="section-desc">
+          Mais de 12 mil sorrisos transformados. Veja o que eles têm a contar sobre a experiência na OdontoVita.
+        </p>
+      </div>
+
+      <div class="dep-grid">
+        <div class="dep-card gsap-scale">
+          <div class="dep-quote">"</div>
+          <div class="dep-stars">★★★★★</div>
+          <p class="dep-text">Fiz meu implante aqui e a experiência foi incrível. A equipe me deixou muito à vontade e o resultado ficou perfeito. Recomendo demais!</p>
+          <div class="dep-author">
+            <div class="dep-avatar">C</div>
+            <div>
+              <div class="dep-name">Carolina Mendes</div>
+              <div class="dep-role">Implante Dentário · São Paulo, SP</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dep-card gsap-scale">
+          <div class="dep-quote">"</div>
+          <div class="dep-stars">★★★★★</div>
+          <p class="dep-text">Depois do clareamento, minha autoestima foi lá em cima. Atendimento ótimo, profissionais muito atenciosos e resultado surpreendente.</p>
+          <div class="dep-author">
+            <div class="dep-avatar">R</div>
+            <div>
+              <div class="dep-name">Ricardo Alves</div>
+              <div class="dep-role">Clareamento Dental · Campinas, SP</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dep-card gsap-scale">
+          <div class="dep-quote">"</div>
+          <div class="dep-stars">★★★★★</div>
+          <p class="dep-text">Trago meus filhos aqui desde pequenos e eles adoram! A odontopediatra é maravilhosa — conseguiu fazer eles não terem medo de dentista.</p>
+          <div class="dep-author">
+            <div class="dep-avatar">F</div>
+            <div>
+              <div class="dep-name">Fernanda Costa</div>
+              <div class="dep-role">Odontopediatria · Guarulhos, SP</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div>
+        <div class="footer-logo">Odonto<span>Vita</span></div>
+        <div style="font-size:.82rem;margin-top:.3rem">© 2025 OdontoVita. Todos os direitos reservados.</div>
+      </div>
+      <div class="footer-copy">
+        <div>Rua das Flores, 123 — Centro</div>
+        <div>(11) 9 9999-9999 · contato@odontovita.com.br</div>
+      </div>
+      <div class="footer-dev">
+        Desenvolvido por <a href="#">LYVOR</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- WHATSAPP -->
+  <a href="https://wa.me/5511999999999?text=Olá!%20Gostaria%20de%20agendar%20uma%20consulta." class="wa-btn" target="_blank" aria-label="WhatsApp">
+    <div class="wa-pulse"></div>
+    <div class="wa-pulse"></div>
+    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    // NAVBAR scroll
+    window.addEventListener('scroll', function() {
+      var nav = document.getElementById('navbar');
+      if (window.scrollY > 20) {
+        nav.classList.add('scrolled');
+      } else {
+        nav.classList.remove('scrolled');
+      }
+    });
+
+    // HAMBURGER
+    document.getElementById('hamburger').addEventListener('click', function() {
+      document.getElementById('navLinks').classList.toggle('open');
+    });
+
+    // Close menu on link click
+    var links = document.querySelectorAll('#navLinks a');
+    for (var i = 0; i < links.length; i++) {
+      links[i].addEventListener('click', function() {
+        document.getElementById('navLinks').classList.remove('open');
+      });
+    }
+
+    // HERO entrance
+    var heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+
+    heroTl
+      .to('.hero-badge', { opacity: 1, y: 0, duration: .7, delay: .3 })
+      .to('.hero-title', { opacity: 1, y: 0, duration: .8 }, '-=.4')
+      .to('.hero-desc', { opacity: 1, y: 0, duration: .7 }, '-=.5')
+      .to('.hero-btns', { opacity: 1, y: 0, duration: .7 }, '-=.5')
+      .to('.gsap-right', { opacity: 1, x: 0, duration: .9, ease: 'power2.out' }, '-=.6');
+
+    // SCROLL animations
+    function revealOnScroll(selector, vars) {
+      var els = document.querySelectorAll(selector);
+      for (var i = 0; i < els.length; i++) {
+        (function(el) {
+          ScrollTrigger.create({
+            trigger: el,
+            start: 'top 88%',
+            onEnter: function() {
+              gsap.to(el, Object.assign({ opacity: 1, y: 0, x: 0, scale: 1, duration: .7, ease: 'power2.out' }, vars || {}));
+            }
+          });
+        })(els[i]);
+      }
+    }
+
+    revealOnScroll('.gsap-left', { x: 0 });
+    revealOnScroll('.gsap-right', { x: 0 });
+
+    // Staggered cards
+    ScrollTrigger.batch('.servico-card', {
+      start: 'top 90%',
+      onEnter: function(batch) {
+        gsap.to(batch, { opacity: 1, scale: 1, y: 0, duration: .6, stagger: .1, ease: 'back.out(1.4)' });
+      }
+    });
+
+    ScrollTrigger.batch('.dep-card', {
+      start: 'top 90%',
+      onEnter: function(batch) {
+        gsap.to(batch, { opacity: 1, scale: 1, y: 0, duration: .6, stagger: .12, ease: 'back.out(1.4)' });
+      }
+    });
+
+    // Section labels, titles, descs
+    var fadeEls = document.querySelectorAll('.section-label, .section-title, .section-desc, .sobre-list, .agendar-features');
+    for (var j = 0; j < fadeEls.length; j++) {
+      (function(el) {
+        ScrollTrigger.create({
+          trigger: el,
+          start: 'top 92%',
+          onEnter: function() {
+            gsap.from(el, { opacity: 0, y: 28, duration: .65, ease: 'power2.out' });
+          }
+        });
+      })(fadeEls[j]);
+    }
+
+    // FORM submit
+    function agendarConsulta() {
+      var inputs = document.querySelectorAll('.form-input, .form-select');
+      var nome = inputs[0].value;
+      var tel = inputs[1].value;
+
+      if (!nome || !tel) {
+        alert('Por favor, preencha ao menos seu nome e telefone.');
+        return;
+      }
+
+      var msg = 'Olá! Gostaria de agendar uma consulta.\n\nNome: ' + nome + '\nTelefone: ' + tel;
+      var url = 'https://wa.me/5511999999999?text=' + encodeURIComponent(msg);
+      window.open(url, '_blank');
+    }
+
+    // Smooth parallax on hero blobs
+    window.addEventListener('scroll', function() {
+      var scrolled = window.pageYOffset;
+      var blobs = document.querySelectorAll('.hero-blob');
+      for (var b = 0; b < blobs.length; b++) {
+        blobs[b].style.transform = 'translateY(' + (scrolled * .12) + 'px)';
+      }
+    });
+  </script>
+</body>
+</html>
